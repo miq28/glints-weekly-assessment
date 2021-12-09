@@ -191,6 +191,6 @@ require("./routes/office.routes")(app);
 
 
 
-app.listen(NODE_PORT, () => {
+app.listen(NODE_PORT, '0.0.0.0', () => {
     console.log(`server is listening on http://localhost:${PORT}`);
 });

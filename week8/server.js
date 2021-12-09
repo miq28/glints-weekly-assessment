@@ -1,7 +1,7 @@
 require('dotenv').config()
 const express = require("express");
 const app = express()
-const PORT = process.env.PORT
+const NODE_PORT = process.env.PORT || process.env.NODE_PORT || 8000
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
 
@@ -191,6 +191,6 @@ require("./routes/office.routes")(app);
 
 
 
-app.listen(PORT, () => {
+app.listen(NODE_PORT, () => {
     console.log(`server is listening on http://localhost:${PORT}`);
 });

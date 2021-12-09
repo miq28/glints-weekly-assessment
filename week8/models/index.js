@@ -8,14 +8,14 @@ const env = process.env.NODE_ENV || 'development';
 // const config = require(__dirname + '/../config/database.json')[env];
 const db = {};
 
-const SequelizeAuto = require('sequelize-auto');
+// const SequelizeAuto = require('sequelize-auto');
 
 
 
 
 const dbConfig = require("../config/db.config.js");
 
-
+/*
 const auto = new SequelizeAuto(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
     host: dbConfig.HOST,
     dialect: dbConfig.dialect,
@@ -31,6 +31,7 @@ const auto = new SequelizeAuto(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
     // tables: ['table1', 'table2', 'myschema.table3'] // use all tables, if omitted
     //...
 })
+*/
 
 // auto.run().then(data => {
 //   console.log(data.tables);      // table and field list

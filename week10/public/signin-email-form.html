@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <title>My New Website</title>
+</head>
+
+<body>
+    <header>
+        <h1>Hello, world</h1>
+        <p>Welcome to my website!</p>
+    </header>
+
+    <main>
+
+        <br />
+        <a href="/signin">Go back to login selection page</a>
+        <br />
+
+        <form target="_blank" action="/api/users/auth/email" method="POST" id="form1">
+ 
+            <p>
+                <label>Email</label><br>
+                <input type="text" name="email" value="mod@mod.com">
+                <!-- <input type="email" name="email" required=""> -->
+            </p>
+
+            <p>
+                <label>Password</label><br>
+                <input type="password" name="password" value="mod" required="">
+            </p>
+
+            <button type="submit" form="form1" value="Submit">Send</button>
+            <button type="reset">Reset</button>
+            <button disabled="disabled">Disabled</button>
+        </form>
+
+        <p id="log">Log</p>
+
+    </main>
+
+    <footer>
+        <p>miq28's website.</p>
+    </footer>
+</body>
+<script>
+    function logSubmit(event) {
+        log.textContent = `Form Submitted! Time stamp: ${event.timeStamp}`;
+        // event.preventDefault();
+    }
+
+    const form = document.getElementById('form1');
+    const log = document.getElementById('log');
+    form.addEventListener('submit', logSubmit);
+</script>
+
+</html>

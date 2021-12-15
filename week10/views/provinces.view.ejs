@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <style>
+      table, th, td {
+          /* font-size: 90%; */
+          white-space : nowrap;
+      }
+  </style>
+    <title>My New Website</title>
+</head>
+<body>
+  <header>
+    <h1>Hello, world</h1>
+    <p>Welcome to my website!</p>
+  </header>
+
+  <main>
+    <a href="/">Go back to home page</a>
+    <h1>Provinces</h1>
+    <table style="width:100">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Created at</th>
+        </tr>
+        <% for(var i=0; i < data.length; i++) { %>
+            <tr>
+                <td>
+                    <%= data[i].id %>
+                </td>
+                <td>
+                    <%= data[i].name %>
+                </td>
+                <td>
+                    <%= data[i].created_at %>
+                </td>
+            </tr>
+            <% } %>
+    </table>
+ 
+  </main>
+
+  <footer>
+    <p>miq28's website.</p>
+  </footer>
+</body>
+<script>
+    function loadDoc() {
+
+        if (document.cookie) {
+            const jwtToken = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('jwt='))
+            .split('=')[1]
+        }
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            // if (this.readyState == 4 && this.status == 200) {
+            if (this.readyState == 4) {
+                console.log(this)
+                document.getElementById("status").innerHTML = this.status + " " + this.statusText;
+                document.getElementById("text").innerHTML = this.responseText;
+            }
+        };
+        xhttp.open("GET", "api/users/welcome", true);        
+        // xhttp.withCredentials = true;
+        // xhttp.setRequestHeader('Authorization', 'Bearer ' + jwtToken);
+        // xhttp.setRequestHeader('x-access-token', jwtToken);
+        xhttp.send();
+    }
+</script>
+</html>

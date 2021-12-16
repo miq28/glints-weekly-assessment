@@ -135,7 +135,7 @@ exports.authEmail = async (req, res) => {
             // user
             res.cookie('jwt', token)
             // res.status(200).json(user);
-            res.redirect('/protected')
+            res.redirect(200, '/protected')
         } else {
             res.status(400).send("Invalid Credentials");
         }

@@ -134,7 +134,8 @@ exports.authEmail = async (req, res) => {
 
             // user
             res.cookie('jwt', token)
-            res.status(200).json(user);
+            // res.status(200).json(user);
+            res.redirect('/protected')
         } else {
             res.status(400).send("Invalid Credentials");
         }
@@ -149,7 +150,8 @@ exports.authEmail = async (req, res) => {
 
 // User welcome
 exports.welcome = (req, res) => {
-    res.status(200).send(`Welcome ${req.user.first_name} 🙌 `);
+    const second_expire = Math.round(req.user.exp - Date.now() / 1000)
+    res.status(200).send(`Welcome ${req.user.first_name} 🙌 <br>Your JWT token will expire in: ${second_expire} seconds`);
 };
 
 // Find a single Tutorial with an id

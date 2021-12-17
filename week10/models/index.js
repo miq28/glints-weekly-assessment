@@ -45,10 +45,6 @@ const auto = new SequelizeAuto(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
 // const Sequelize = require('sequelize');
 // const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
-  // const sequelize = new Sequelize('postgres://uazgihhgfuzsxq:f5e6a069b7d1ad03a7cb0b70470311a972b2b1b599eeb5530f6de3d96b9a63b4@ec2-52-70-205-234.compute-1.amazonaws.com:5432/d21uplqtf3sufk', {
-  host: dbConfig.HOST,
-  dialect: dbConfig.dialect,
-  //   operatorsAliases: false,
   define: {
     timestamps: false
   },

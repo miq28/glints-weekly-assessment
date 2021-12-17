@@ -6,11 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server",
-    "nodemon": "nodemon server",
-    "db@drop": "psql postgresql://postgres:postgres@dbtest.cn50fuyfr3aa.ap-southeast-1.rds.amazonaws.com -c 'DROP DATABASE IF EXISTS indonesia_2;'",
-    "db@reset": "psql postgresql://uazgihhgfuzsxq:f5e6a069b7d1ad03a7cb0b70470311a972b2b1b599eeb5530f6de3d96b9a63b4@ec2-52-70-205-234.compute-1.amazonaws.com:5432/d21uplqtf3sufk -f ./database/reset-db.sql",
-    "db@resetwin": "psql --file=./database/reset-db.sql -h ec2-52-70-205-234.compute-1.amazonaws.com -U uazgihhgfuzsxq",
-    "heroku": "heroku pg:psql postgresql-animate-70618 --app ptb1prod -f=./database/reset-db.sql"
+    "nodemon": "nodemon server"
   },
   "nodemonConfig": {
     "ignore": [

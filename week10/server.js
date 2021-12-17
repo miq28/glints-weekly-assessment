@@ -8,6 +8,8 @@ const session = require('express-session')
 
 require('./passport');
 
+app.use(express.static('public'));
+
 app.set('view engine', 'ejs');
 
 

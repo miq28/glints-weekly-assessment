@@ -1,6 +1,6 @@
 -- CREATE DATABASE IF NOT EXISTS indonesia_2;
 
-\connect indonesia_2
+-- \connect indonesia_2
 
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS offices CASCADE;

@@ -9,15 +9,17 @@ const jwt = require("jsonwebtoken");
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+// const { noExtendLeft } = require("sequelize/dist/lib/operators");
 passport.use(new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password',
-    passReqToCallback: true,
-    session: false
+    // passReqToCallback: true,
+    // session: false
 },
-    async function (req, email, password, cb) {
+    async function (email, password, cb) {
         //this one is typically a DB call. Assume that the returned user object is pre-formatted and ready for storing in JWT
         try {
+            console.log('PASSSSSS')
             const user = await User.findOne({ where: {email: email} })
             const passwordIsCorrect = await bcrypt.compare(password, user.password)
             if (!user || !passwordIsCorrect ) {
@@ -26,7 +28,21 @@ passport.use(new LocalStrategy({
             }
             // console.log('Logged In Successfully', user)
             console.log('Logged In Successfully')
+
+            const token = jwt.sign(
+                { user_id: user.id, first_name: user.first_name, last_name: user.last_name, email: user.email },
+                process.env.TOKEN_KEY,
+                {
+                    expiresIn: "30s",
+                }
+            );
+
+            user.token = token
+    
+            console.log('TOKEN_1', token)
+
             return cb(null, user, { message: 'Logged In Successfully' });
+
             // return cb(null, user);
         } catch (err) {
             cb(err)

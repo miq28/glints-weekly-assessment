@@ -5,6 +5,8 @@ module.exports = app => {
     const user = require("../controllers/user.controller.js");
   
     var router = require("express").Router();
+
+    router.get('/me', auth, user.welcome);
   
     // Retrieve all Users
     router.get("/", user.findAll);
@@ -24,8 +26,12 @@ module.exports = app => {
     // User sign-in by email
     router.post("/signin", user.signin);
 
+    router.get("/auth/email", user.getAuthEmail);
+
     // User sign-in by email
     router.post("/auth/email", passport.authenticate('local', { failureRedirect: '/login' }), user.authEmail);
+
+
 
 
     

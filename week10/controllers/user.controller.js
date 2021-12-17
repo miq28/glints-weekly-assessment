@@ -44,7 +44,7 @@ exports.findOne = async (req, res) => {
     var condition = id ? { id: id } : null;
 
     try {
-        const data = await User.findByPk(id);        
+        const data = await User.findByPk(id);
         if (data) return res.send(data)
         return res.status(400).send('User not exist')
     } catch (err) {
@@ -108,38 +108,45 @@ exports.signup = async (req, res) => {
 
 // User sign-in choose
 exports.signin = async (req, res) => {
-    res.sendFile('login_form.html',  {root: __dirname+'/public'})
+    res.sendFile('login_form.html', { root: process.cwd() + '/public' })
 }
+
+// User sign-in
+exports.getAuthEmail = async (req, res) => {
+    // Our login logic starts here
+    res.sendFile('signin-email-form.html', { root: process.cwd() + '/public' })
+
+};
 
 // User sign-in
 exports.authEmail = async (req, res) => {
     // Our login logic starts here
     try {
         // Get user input
-        const { email, password } = req.body;
+        // const { email, password } = req.body;
 
-    // res.redirect('/protected');
-    // res.status(200).send('OKKE');
-    const user = req.user
+        // res.redirect('/protected');
+        // res.status(200).send('OKKE');
+        const user = req.user
 
-        if (user && (await bcrypt.compare(password, user.password))) {
-            // Create token
-            const token = jwt.sign(
-                { user_id: user.id, first_name: user.first_name, last_name: user.last_name, email },
-                process.env.TOKEN_KEY,
-                {
-                    expiresIn: "30s",
-                }
-            );
+        const token = jwt.sign(
+            { user_id: user.id, first_name: user.first_name, last_name: user.last_name, email: user.email },
+            process.env.TOKEN_KEY,
+            {
+                expiresIn: "30s",
+            }
+        );
 
-            // user
-            res.cookie('jwt', token)
-            // res.status(200).json(user);
-            res.redirect(200, '/protected')
-        } else {
-            res.status(400).send("Invalid Credentials");
-        }
-        
+        // console.log('TOKEN_2', token)
+
+        // console.log(user)
+
+        // user
+        // user.token = token
+        res.cookie('jwt', token)
+        res.status(200).send({user, token}).redirect('/protected');
+        // return res.redirect(200, '/protected');
+
     } catch (err) {
         console.log(err);
     }

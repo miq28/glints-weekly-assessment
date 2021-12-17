@@ -157,9 +157,9 @@ app.get('/adduser', (req, res) => {
     res.sendFile('adduser-form.html', { root: __dirname + '/public' })
 })
 
-app.get('/auth/email', (req, res) => {
-    res.sendFile('signin-email-form.html', { root: __dirname + '/public' })
-})
+// app.get('/auth/email', (req, res) => {
+//     res.sendFile('signin-email-form.html', { root: __dirname + '/public' })
+// })
 
 checkAuthenticated = (req, res, next) => {
     if (req.isAuthenticated()) { return next() }

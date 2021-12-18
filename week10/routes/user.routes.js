@@ -1,4 +1,5 @@
-const AUTH = require('../auth')
+const authJwt = require('../auth/auth.jwt')
+const authLocal = require('../auth/auth.local')
 
 module.exports = app => {
   const user = require("../controllers/user.controller.js");
@@ -6,7 +7,7 @@ module.exports = app => {
   var router = require("express").Router();
 
   router.get('/me',
-    AUTH.authJWT.verifyToken,
+    authJwt.verifyToken,
     user.welcome
   );
 
@@ -18,7 +19,7 @@ module.exports = app => {
 
   // User welcome
   router.get("/welcome",
-    AUTH.authJWT.verifyToken,
+    authJwt.verifyToken,
     user.welcome
   );
 
@@ -35,7 +36,7 @@ module.exports = app => {
 
   // User sign-in by email
   router.post("/auth/email",
-    AUTH.authLocal,
+    authLocal,
     user.authEmail
   );
 

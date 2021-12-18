@@ -155,7 +155,7 @@ exports.authEmail = async (req, res) => {
         res.cookie('accessToken', accessToken)
         res.cookie('refreshToken', refreshToken)
         res.cookie('jwt', accessToken)
-        return res.status(200).send({
+        return res.status(200).json({
             user,
             accessToken: accessToken,
             refreshToken: refreshToken

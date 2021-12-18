@@ -1,3 +1,5 @@
+const {verifyToken} = require('../auth/auth.jwt')
+
 module.exports = app => {
   const provinces = require("../controllers/province.controller.js");
 

@@ -21,7 +21,7 @@
         <br />
 
         <form action="/api/users/auth/email" method="POST" id="form1">
- 
+
             <p>
                 <label>Email</label><br>
                 <input type="text" name="email" value="mod@mod.com">
@@ -49,12 +49,43 @@
 <script>
     function logSubmit(event) {
         log.textContent = `Form Submitted! Time stamp: ${event.timeStamp}`;
-        // event.preventDefault();
+        event.preventDefault();
+
+        fetch(event.target.action, {
+            method: 'POST',
+            body: new URLSearchParams(new FormData(event.target)) // event.target is the form
+        }).then((resp) => {
+            // return resp.json(); // or resp.text() or whatever the server sends
+            // window.location.replace("new target URL");
+            window.location.href = myLoginUrl;
+            return false;
+        }).then((body) => {
+            // TODO handle body
+            window.location.replace("new target URL");
+            return false;
+        }).catch((error) => {
+            // TODO handle error
+        });
     }
 
-    const form = document.getElementById('form1');
-    const log = document.getElementById('log');
-    form.addEventListener('submit', logSubmit);
+    // const form = document.getElementById('form1');
+    // const log = document.getElementById('log');
+    // form.addEventListener('submit', logSubmit);
+
+    // document.forms['myFormId'].addEventListener('submit', (event) => {
+    //     event.preventDefault();
+    //     // TODO do something here to show user that form is being submitted
+    //     fetch(event.target.action, {
+    //         method: 'POST',
+    //         body: new URLSearchParams(new FormData(event.target)) // event.target is the form
+    //     }).then((resp) => {
+    //         return resp.json(); // or resp.text() or whatever the server sends
+    //     }).then((body) => {
+    //         // TODO handle body
+    //     }).catch((error) => {
+    //         // TODO handle error
+    //     });
+    // });
 </script>
 
 </html>

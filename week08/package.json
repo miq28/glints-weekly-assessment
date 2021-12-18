@@ -5,10 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "db@drop": "psql postgresql://postgres:postgres@dbtest.cn50fuyfr3aa.ap-southeast-1.rds.amazonaws.com -c 'DROP DATABASE IF EXISTS indonesia_2;'",
-    "db@reset": "psql postgresql://postgres:postgres@dbtest.cn50fuyfr3aa.ap-southeast-1.rds.amazonaws.com -f ./database/reset-db.sql",
-    "db@resetwin": "psql --file=./database/reset-db.sql -h dbtest.cn50fuyfr3aa.ap-southeast-1.rds.amazonaws.com -U postgres"
+    "start": "node server.js"
   },
   "nodemonConfig": {
     "ignore": [

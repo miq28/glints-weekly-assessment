@@ -1,39 +1,48 @@
-const auth = require("../middleware/auth");
-const passport = require('passport');
+const authJWT = require("../auth/auth.jwt");
+const passportLocalStrategyAll = require('../auth')
 
 module.exports = app => {
-    const user = require("../controllers/user.controller.js");
-  
-    var router = require("express").Router();
+  const user = require("../controllers/user.controller.js");
 
-    router.get('/me', auth, user.welcome);
-  
-    // Retrieve all Users
-    router.get("/", user.findAll);
+  var router = require("express").Router();
 
-    // render users
-    router.get("/render", user.render);
+  router.get('/me',
+    authJWT,
+    user.welcome
+  );
 
-    // User welcome
-    router.get("/welcome", auth, user.welcome);
+  // Retrieve all Users
+  router.get("/", user.findAll);
 
-    // Retrieve 1 user
-    router.get("/:id", user.findOne);
+  // render users
+  router.get("/render", user.render);
 
-    // User sign-up
-    router.post("/signup", user.signup);
+  // User welcome
+  router.get("/welcome",
+    authJWT,
+    user.welcome
+  );
 
-    // User sign-in by email
-    router.post("/signin", user.signin);
+  // Retrieve 1 user
+  router.get("/:id", user.findOne);
 
-    router.get("/auth/email", user.getAuthEmail);
+  // User sign-up
+  router.post("/signup", user.signup);
 
-    // User sign-in by email
-    router.post("/auth/email", passport.authenticate('local', { failureRedirect: '/login' }), user.authEmail);
+  // User sign-in by email
+  router.post("/signin", user.signin);
+
+  router.get("/auth/email", user.getAuthEmail);
+
+  // User sign-in by email
+  router.post("/auth/email",
+    passportLocalStrategyAll,
+    user.authEmail
+  );
 
 
 
 
-    
-    app.use('/api/users', router);
-  };
+
+  app.use('/api/users', router);
+};

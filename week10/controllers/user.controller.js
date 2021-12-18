@@ -5,6 +5,7 @@ const { isEmptyObject } = require("../utils")
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const passport = require('passport');
+const { GenerateToken } = require('../auth/auth.jwt')
 
 // Retrieve all Tutorials from the database.
 exports.findAll = async (req, res) => {
@@ -76,7 +77,7 @@ exports.signup = async (req, res) => {
         encryptedPassword = await bcrypt.hash(password, 10);
 
         // Create user in our database
-        const user = await User.create({
+        const createdUser = await User.create({
             first_name,
             last_name,
             district_id,
@@ -84,25 +85,32 @@ exports.signup = async (req, res) => {
             password: encryptedPassword,
         });
 
-        // Create token
-        const token = jwt.sign(
-            { user_id: user.id, email },
-            process.env.TOKEN_KEY,
-            {
-                expiresIn: "2h",
-            }
-        );
+        const payload = {
+            id: createdUser.id,
+            first_name,
+            last_name,
+            email,
+            district_id
+        }
+
+        const { accessToken, refreshToken } = GenerateToken(payload)
 
         // convert sequelize object to json
-        const data = user.toJSON()
-        // save user token
-        data.token = token;
+        const objUser = createdUser.toJSON()
+
 
         // return new user
-        res.status(201).json(data);
+        res.cookie('accessToken', accessToken)
+        res.cookie('refreshToken', refreshToken)
+        res.cookie('jwt', accessToken)
+        return res.status(200).send({
+            user: objUser,
+            accessToken: accessToken,
+            refreshToken: refreshToken
+        })
     } catch (err) {
         console.log(err);
-        return res.status(400).send(err.message);
+        res.status(400).send(err.message);
     }
 };
 
@@ -129,37 +137,28 @@ exports.authEmail = async (req, res) => {
         // res.status(200).send('OKKE');
         const user = req.user
 
-        const accessToken = jwt.sign(
-            { user_id: user.id, first_name: user.first_name, last_name: user.last_name, email: user.email },
-            process.env.ACCESS_TOKEN_KEY,
-            {
-                expiresIn: "30s",
-            }
-        );
+        const payload = {
+            id: user.id,
+            email: user.email,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            district_id: user.district_id
+        }
 
-        const refreshToken = jwt.sign(
-            { user_id: user.id, first_name: user.first_name, last_name: user.last_name, email: user.email },
-            process.env.REFRESH_TOKEN_KEY,
-            {
-                expiresIn: "24h",
-            }
-        );
+        const { accessToken, refreshToken } = GenerateToken(payload)
 
-        // console.log('TOKEN_2', token)
 
-        // console.log(user)
-
-        // user
-        // user.token = token
-        res.cookie('jwt', accessToken)
         // res.status(200).send({user, token}).redirect('/protected');
         // res.set('x-token', token);
         // return res.redirect(200, '/protected');
         // res.header('Access-Control-Allow-Origin', req.headers.origin);
+        res.cookie('accessToken', accessToken)
+        res.cookie('refreshToken', refreshToken)
+        res.cookie('jwt', accessToken)
         return res.status(200).send({
             user,
-            access:accessToken,
-            refresh:refreshToken
+            accessToken: accessToken,
+            refreshToken: refreshToken
         })
 
     } catch (err) {
@@ -173,7 +172,10 @@ exports.authEmail = async (req, res) => {
 // User welcome
 exports.welcome = (req, res) => {
     const second_expire = Math.round(req.user.exp - Date.now() / 1000)
-    res.status(200).send(`Welcome ${req.user.first_name} 🙌 <br>Your JWT token will expire in: ${second_expire} seconds`);
+    res.status(200).send({
+        user: req.user,
+        message: `Welcome ${req.user.first_name} 😁🤗🤡 <br>Your JWT token will expire in: ${second_expire} seconds`
+    });
 };
 
 // Find a single Tutorial with an id

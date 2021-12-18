@@ -1,3 +1,8 @@
-const passportLocalStrategyAll = require('./auth.local')
+const authLocal = require('./auth.local')
+const authJWT = require('./auth.jwt');
 
-module.exports = passportLocalStrategyAll;
+
+module.exports = {
+    authLocal,
+    authJWT
+};

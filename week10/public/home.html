@@ -55,9 +55,11 @@
         xhttp.onreadystatechange = function () {
             // if (this.readyState == 4 && this.status == 200) {
             if (this.readyState == 4) {
-                console.log(this)
+                // console.log(this)
                 document.getElementById("status").innerHTML = this.status + " " + this.statusText;
-                document.getElementById("text").innerHTML = this.responseText;
+                obj = JSON.parse(this.responseText);
+                console.log(obj)
+                document.getElementById("text").innerHTML = obj.message || obj.err;
             }
         };
         xhttp.open("GET", "api/users/welcome", true);        

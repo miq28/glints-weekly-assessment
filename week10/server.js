@@ -16,8 +16,6 @@ app.set('view engine', 'ejs');
 
 
 
-// const app = express();
-// app.use(...);
 
 const db = require("./models");
 db.sequelize.sync();
@@ -36,16 +34,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
 
-//Middleware
-// app.use(session({
-//     secret: "secret",
-//     resave: false,
-//     saveUninitialized: true,
-// }))
-
-
-
-
 app.use(passport.initialize());
 // app.use(passport.session())
 
@@ -55,23 +43,23 @@ app.use(passport.initialize());
 
 
 
-app.get('/', (req, res) => {
-    res.sendFile('home.html', { root: __dirname + '/public' })
-})
+// app.get('/', (req, res) => {
+//     res.sendFile('home.html', { root: __dirname + '/public' })
+// })
 
-app.get('/signin', (req, res) => {
-    res.sendFile('signin.html', { root: __dirname + '/public' })
-})
+// app.get('/signin', (req, res) => {
+//     res.sendFile('signin.html', { root: __dirname + '/public' })
+// })
 
-app.post('/signout', function (req, res) {
-    req.logout();
-    res.redirect('/');
-    console.log(`-------> User Logged out`)
-});
+// app.post('/signout', function (req, res) {
+//     req.logout();
+//     res.redirect('/');
+//     console.log(`-------> User Logged out`)
+// });
 
-app.get('/adduser', (req, res) => {
-    res.sendFile('adduser-form.html', { root: __dirname + '/public' })
-})
+// app.get('/adduser', (req, res) => {
+//     res.sendFile('adduser-form.html', { root: __dirname + '/public' })
+// })
 
 // app.get('/auth/email', (req, res) => {
 //     res.sendFile('signin-email-form.html', { root: __dirname + '/public' })
@@ -112,14 +100,8 @@ app.get('/google/callback', passport.authenticate('google'), (req, res) => {
     res.redirect('/protected')
 })
 
-require('./routes')(app)
-// require("./routes")(app);
-// require("./routes/province.routes")(app);
-// require("./routes/regency.routes")(app);
-// require("./routes/district.routes")(app);
-// require("./routes/user.routes")(app);
-// require("./routes/office.routes")(app);
 
+require('./routes')(app)
 
 
 app.listen(NODE_PORT, '0.0.0.0', () => {

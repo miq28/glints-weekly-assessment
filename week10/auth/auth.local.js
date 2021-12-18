@@ -6,37 +6,36 @@ const User = db.user;
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+
 const passportLocalStrategy = new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password',
     // passReqToCallback: true,
-    session: false
+    // session: false
 },
     async function (email, password, cb) {
         //this one is typically a DB call. Assume that the returned user object is pre-formatted and ready for storing in JWT
+        var message;
         try {
-            console.log('PASSSSSS')
+            // console.log('Local strategy is called', email, password)
+
             const user = await User.findOne({ where: { email: email } })
-            const passwordIsCorrect = await bcrypt.compare(password, user.password)
-            if (!user || !passwordIsCorrect) {
-                console.log('Incorrect email or password.')
-                return cb(null, false, { message: 'Incorrect email or password.' });
+            if (!user) {
+                message = 'Incorrect username/email or password'
+                console.log({ message: message })
+                return cb(null, false, { message: message });
             }
-            // console.log('Logged In Successfully', user)
-            console.log('Logged In Successfully via Local Strategy')
 
-            const token = jwt.sign(
-                { user_id: user.id, first_name: user.first_name, last_name: user.last_name, email: user.email },
-                process.env.ACCESS_TOKEN_KEY,
-                {
-                    expiresIn: "30s",
-                }
-            );
+            const passwordIsCorrect = await bcrypt.compare(password, user.password)
+            if (!passwordIsCorrect) {
+                message = 'Incorrect username/email or password'
+                console.log(message)
+                return cb(null, false, { message: message });
+            }
 
-            user.token = token
 
-            console.log('TOKEN_1', token)
-
+            message = 'Logged In Successfully via Local Strategy';
+            console.log({ message: message, user: user.dataValues })
             return cb(null, user, { message: 'Logged In Successfully via Local Strategy' });
 
             // return cb(null, user);
@@ -46,15 +45,15 @@ const passportLocalStrategy = new LocalStrategy({
     }
 )
 
-const passportLocalStrategyAll = passport.authenticate(passportLocalStrategy, { failureRedirect: '/login' })
+const passportLocalStrategyAll = passport.authenticate(passportLocalStrategy, { failureRedirect: '/logan' })
 
 passport.serializeUser(function (user, cb) {
-    console.log('\n--------> Serialize user')
+    console.log('\n---------> Serialize user')
     cb(null, user);
 });
 
 passport.deserializeUser(function (obj, cb) {
-    console.log('\n--------- Deserialize user')
+    console.log('\n---------> Deserialize user')
     cb(null, obj);
 });
 

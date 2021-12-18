@@ -1,5 +1,4 @@
-const authJWT = require("../auth/auth.jwt");
-const passportLocalStrategyAll = require('../auth')
+const AUTH = require('../auth')
 
 module.exports = app => {
   const user = require("../controllers/user.controller.js");
@@ -7,7 +6,7 @@ module.exports = app => {
   var router = require("express").Router();
 
   router.get('/me',
-    authJWT,
+    AUTH.authJWT.verifyToken,
     user.welcome
   );
 
@@ -19,7 +18,7 @@ module.exports = app => {
 
   // User welcome
   router.get("/welcome",
-    authJWT,
+    AUTH.authJWT.verifyToken,
     user.welcome
   );
 
@@ -36,12 +35,9 @@ module.exports = app => {
 
   // User sign-in by email
   router.post("/auth/email",
-    passportLocalStrategyAll,
+    AUTH.authLocal,
     user.authEmail
   );
-
-
-
 
 
   app.use('/api/users', router);

@@ -1,11 +1,12 @@
 const jwt = require("jsonwebtoken");
 
-const verifyToken = async (req, res, next) => {
-  // console.log(req.headers)
-
+exports.verifyToken = async (req, res, next) => {
+  // console.log(req.body)
   try {
     let token = null;
+    var message;
     if (req.body.token || req.query.token || req.headers["x-access-token"]) {
+      // console.log('body query header')
       token = req.body.token || req.query.token || req.headers["x-access-token"]
     } else if (req.headers['authorization']) {
       // console.log('header authorization')
@@ -21,19 +22,58 @@ const verifyToken = async (req, res, next) => {
       if (token) { token = token.split('=')[1] }
     }
 
-    if (!token || token === undefined) {
-      return res.status(403).send("Unauthorized. JWT token is not found");
+
+
+    if (!token || token === undefined || token === null) {
+      message = "Unauthorized. JWT token is not found"
+      console.log({ err: message })
+      return res.status(403).send({ err: message });
     }
-    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_KEY);
-    req.user = decoded;
-    console.log(req.user)
-    return next();
+    // const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_KEY);
+
+    jwt.verify(token, process.env.ACCESS_TOKEN_KEY, function (err, decoded) {
+      if (err) {
+        /*
+          err = {
+            name: '_______',
+            message: '_______'
+          }
+        */
+        console.log({ err: err.message })
+        return res.status(401).send({ err: err.message });
+      }
+
+      req.user = decoded;
+      console.log({ decoded: decoded })
+      return next();
+    });
+
   } catch (err) {
     console.error({ err: err.message })
     return res.status(401).send({ err: err.message });
   }
-
-
 };
 
-module.exports = verifyToken;
+exports.GenerateToken = (payload) => {
+
+  const accessToken = jwt.sign(
+    payload,
+    process.env.ACCESS_TOKEN_KEY,
+    {
+      expiresIn: "30s",
+    }
+  );
+
+  const refreshToken = jwt.sign(
+    payload,
+    process.env.ACCESS_TOKEN_KEY,
+    {
+      expiresIn: "24h",
+    }
+  );
+
+  return {accessToken, refreshToken}
+
+}
+
+// module.exports = verifyToken;

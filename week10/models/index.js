@@ -85,4 +85,6 @@ db.Sequelize = Sequelize;
 
 // console.log('DEEEEEEE BEEEEEEE', db)
 
+db.sequelize.sync();
+
 module.exports = db;

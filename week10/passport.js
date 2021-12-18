@@ -31,7 +31,7 @@ passport.use(new LocalStrategy({
 
             const token = jwt.sign(
                 { user_id: user.id, first_name: user.first_name, last_name: user.last_name, email: user.email },
-                process.env.TOKEN_KEY,
+                process.env.ACCESS_TOKEN_KEY,
                 {
                     expiresIn: "30s",
                 }

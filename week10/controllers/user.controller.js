@@ -129,11 +129,19 @@ exports.authEmail = async (req, res) => {
         // res.status(200).send('OKKE');
         const user = req.user
 
-        const token = jwt.sign(
+        const accessToken = jwt.sign(
             { user_id: user.id, first_name: user.first_name, last_name: user.last_name, email: user.email },
-            process.env.TOKEN_KEY,
+            process.env.ACCESS_TOKEN_KEY,
             {
                 expiresIn: "30s",
+            }
+        );
+
+        const refreshToken = jwt.sign(
+            { user_id: user.id, first_name: user.first_name, last_name: user.last_name, email: user.email },
+            process.env.REFRESH_TOKEN_KEY,
+            {
+                expiresIn: "24h",
             }
         );
 
@@ -143,9 +151,16 @@ exports.authEmail = async (req, res) => {
 
         // user
         // user.token = token
-        res.cookie('jwt', token)
-        res.status(200).send({user, token}).redirect('/protected');
+        res.cookie('jwt', accessToken)
+        // res.status(200).send({user, token}).redirect('/protected');
+        // res.set('x-token', token);
         // return res.redirect(200, '/protected');
+        // res.header('Access-Control-Allow-Origin', req.headers.origin);
+        return res.status(200).send({
+            user,
+            access:accessToken,
+            refresh:refreshToken
+        })
 
     } catch (err) {
         console.log(err);

@@ -21,7 +21,13 @@ app.set('view engine', 'ejs');
 const db = require("./models");
 db.sequelize.sync();
 
-app.use(cors())
+// CORS
+var corsOptions = {
+    exposedHeaders: '*'
+  }
+
+app.use(cors(corsOptions))
+
 // parse requests of content-type - application/json
 app.use(express.json());
 
@@ -52,7 +58,7 @@ var cookieExtractor = function (req) {
     return token;
 };
 opts.jwtFromRequest = cookieExtractor;
-opts.secretOrKey = process.env.TOKEN_KEY;
+opts.secretOrKey = process.env.ACCESS_TOKEN_KEY;
 passport.use(new JwtStrategy(opts, function (jwt_payload, done) {
     console.log("JWT BASED VALIDATION GETTING CALLED")
     console.log("JWT", jwt_payload)

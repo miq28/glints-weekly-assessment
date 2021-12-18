@@ -24,7 +24,7 @@ const verifyToken = async (req, res, next) => {
     if (!token || token === undefined) {
       return res.status(403).send("Unauthorized. JWT token is not found");
     }
-    const decoded = jwt.verify(token, process.env.TOKEN_KEY);
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_KEY);
     req.user = decoded;
     console.log(req.user)
     return next();

@@ -178,6 +178,7 @@ exports.authEmail = async (req, res) => {
 
     } catch (err) {
         console.log(err);
+        return res.status(400).send({err: err.message})
     }
     // Our register logic ends here
 

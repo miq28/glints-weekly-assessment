@@ -85,13 +85,13 @@ db.Sequelize = Sequelize;
 
 // console.log('DEEEEEEE BEEEEEEE', db)
 
-// db.sequelize.sync();
+db.sequelize.sync();
 
 db.refreshToken.belongsTo(db.user, {
   foreignKey: 'userId', targetKey: 'id'
 });
-db.user.hasOne(db.refreshToken, {
-  foreignKey: 'userId', targetKey: 'id'
-});
+// db.user.hasOne(db.refreshToken, {
+//   foreignKey: 'userId', targetKey: 'id'
+// });
 
 module.exports = db;

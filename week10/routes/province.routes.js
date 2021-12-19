@@ -14,12 +14,12 @@ module.exports = app => {
 
   // Retrieve all province
   router.get("/",
-    cache.route(),
+    // cache.route(),
     provinces.findAll
   );
 
   // Retrieve a province by id
   router.get("/:id", provinces.findOne);
 
-  app.use('/api/provinces', router);
+  app.use('/api/provinces', cache.route(), router);
 };

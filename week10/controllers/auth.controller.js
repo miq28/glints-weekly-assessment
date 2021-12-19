@@ -66,16 +66,19 @@ exports.refreshToken = async (req, res) => {
   try {
     let refreshToken = await RefreshToken.findOne({ where: { token: requestToken } });
 
-    console.log(refreshToken)
+    console.log(refreshToken.toJSON())
 
     if (!refreshToken) {
       res.status(403).json({ message: "Refresh token is not in database!" });
       return;
     }
 
+    const tokenHasExpired = RefreshToken.verifyExpiration(refreshToken)
+    console.log({tokenHasExpired: tokenHasExpired})
+
     if (RefreshToken.verifyExpiration(refreshToken)) {
       RefreshToken.destroy({ where: { id: refreshToken.id } });
-      
+
       res.status(403).json({
         message: "Refresh token was expired. Please make a new signin request",
       });
@@ -83,15 +86,62 @@ exports.refreshToken = async (req, res) => {
     }
 
     const user = await refreshToken.getUser();
-    let newAccessToken = jwt.sign({ id: user.id }, config.secret, {
-      expiresIn: config.jwtExpiration,
-    });
+    console.log(user.toJSON())
 
-    return res.status(200).json({
-      accessToken: newAccessToken,
-      refreshToken: refreshToken.token,
-    });
+    if (user) {
+      console.log({info: 'User with that refresh_token found!'})
+      let newAccessToken = jwt.sign({ id: user.id }, config.secret, {
+        expiresIn: config.jwtExpiration,
+      });
+  
+      return res.status(200).json({
+        accessToken: newAccessToken,
+        refreshToken: refreshToken.token,
+      });
+    } else {
+      console.log({err: 'User not found'})
+      return res.status(500).send({ err: 'User not found' });
+    }
+
   } catch (err) {
+    console.log({err: err})
     return res.status(500).send({ message: err });
   }
+
 };
+
+exports.login = async (req, res) => {
+  // When user logs in, there is no token pair in the browser
+  // cookies. We need to issue both of them. Because you also
+  // log user in in this step, I assume that you already have
+  // their user ID.
+  let user_id = 2212;
+
+  // Generate new refresh token and it's expiration
+  let refresh_token = generate_refresh_token(64);
+  let refresh_token_maxage = new Date() + jwt_refresh_expiration;
+
+  // Generate new access token
+  let token = jwt.sign({ uid: user_id }, jwt_secret, {
+    expiresIn: jwt_expiration
+  });
+
+  // Set browser httpOnly cookies
+  res.cookie("access_token", token, {
+    // secure: true,
+    httpOnly: true
+  });
+  res.cookie("refresh_token", refresh_token, {
+    // secure: true,
+    httpOnly: true
+  });
+
+  // And store the user in Redis under key 2212
+  redis.set(user_id, JSON.stringify({
+    refresh_token: refresh_token,
+    expires: refresh_token_maxage
+  }),
+    redis.print
+  );
+
+}

@@ -6,6 +6,9 @@ module.exports = (sequelize, Sequelize) => {
     token: {
       type: Sequelize.STRING,
     },
+    userId: {
+      type: Sequelize.INTEGER,
+    },
     expiryDate: {
       type: Sequelize.DATE,
     },

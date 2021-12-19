@@ -146,12 +146,15 @@ exports.authEmail = async (req, res) => {
             district_id: user.district_id
         }
 
-        const { accessToken, refreshToken } = GenerateToken(payload)
-        
+        const { accessToken } = GenerateToken(payload)
+
         // Create user in our database
-        const storedRefreshToken = await RefreshToken.createToken({
-            token: refreshToken
-        });
+        const storedRefreshToken = await RefreshToken.createToken(
+            // {
+            //     token: refreshToken
+            // }
+            payload
+        );
 
         console.log(storedRefreshToken)
 
@@ -163,12 +166,12 @@ exports.authEmail = async (req, res) => {
 
 
         res.cookie('accessToken', accessToken)
-        res.cookie('refreshToken', refreshToken)
+        res.cookie('refreshToken', storedRefreshToken)
         res.cookie('jwt', accessToken)
         return res.status(200).json({
             user,
             accessToken: accessToken,
-            refreshToken: refreshToken
+            refreshToken: storedRefreshToken
         })
 
         // res.send('OK')

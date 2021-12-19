@@ -1,8 +1,8 @@
 var cache = require('express-redis-cache')({
-    host: 'redis-18503.c295.ap-southeast-1-1.ec2.cloud.redislabs.com',
-    port: 18503,
-    auth_pass: 'A1U9UmEZjDuJjBP1lXzZe8Ifyu6vzSK8',
-    expire: 15
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT,
+    auth_pass: process.env.REDIS_PASSWORD,
+    expire: process.env.REDIS_DEFAULT_EXPIRE
 });
 
 cache.on('connected', function () {

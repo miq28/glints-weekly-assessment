@@ -4,6 +4,8 @@ const { user: User, role: Role, refreshToken: RefreshToken } = db;
 
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const { v4: uuidv4 } = require("uuid");
+const cache = require('../cache')
 // ...
 
 exports.signin = (req, res) => {
@@ -74,7 +76,7 @@ exports.refreshToken = async (req, res) => {
     }
 
     const tokenHasExpired = RefreshToken.verifyExpiration(refreshToken)
-    console.log({tokenHasExpired: tokenHasExpired})
+    console.log({ tokenHasExpired: tokenHasExpired })
 
     if (RefreshToken.verifyExpiration(refreshToken)) {
       RefreshToken.destroy({ where: { id: refreshToken.id } });
@@ -89,22 +91,22 @@ exports.refreshToken = async (req, res) => {
     console.log(user.toJSON())
 
     if (user) {
-      console.log({info: 'User with that refresh_token found!'})
+      console.log({ info: 'User with that refresh_token found!' })
       let newAccessToken = jwt.sign({ id: user.id }, config.secret, {
         expiresIn: config.jwtExpiration,
       });
-  
+
       return res.status(200).json({
         accessToken: newAccessToken,
         refreshToken: refreshToken.token,
       });
     } else {
-      console.log({err: 'User not found'})
+      console.log({ err: 'User not found' })
       return res.status(500).send({ err: 'User not found' });
     }
 
   } catch (err) {
-    console.log({err: err})
+    console.log({ err: err })
     return res.status(500).send({ message: err });
   }
 
@@ -118,30 +120,64 @@ exports.login = async (req, res) => {
   let user_id = 2212;
 
   // Generate new refresh token and it's expiration
-  let refresh_token = generate_refresh_token(64);
-  let refresh_token_maxage = new Date() + jwt_refresh_expiration;
+  // let refresh_token = generate_refresh_token(64);
+  let refreshToken = uuidv4();
+
+  // let refresh_token_maxage = new Date() + Number(config.jwtRefreshExpiration);
+  let now = new Date()
+  let refresh_token_maxage = now.setSeconds(now.getSeconds() + config.jwtRefreshExpiration);
+  refresh_token_maxage = new Date(refresh_token_maxage);
+
+  console.log({ refresh_token_maxage: refresh_token_maxage })
 
   // Generate new access token
-  let token = jwt.sign({ uid: user_id }, jwt_secret, {
-    expiresIn: jwt_expiration
-  });
-
-  // Set browser httpOnly cookies
-  res.cookie("access_token", token, {
-    // secure: true,
-    httpOnly: true
-  });
-  res.cookie("refresh_token", refresh_token, {
-    // secure: true,
-    httpOnly: true
+  let accessToken = jwt.sign({ uid: user_id }, config.secret, {
+    expiresIn: config.jwtExpiration
   });
 
   // And store the user in Redis under key 2212
+
+  /*
   redis.set(user_id, JSON.stringify({
     refresh_token: refresh_token,
     expires: refresh_token_maxage
   }),
     redis.print
   );
+  */
+
+  cache.add(
+    user_id,
+    JSON.stringify(
+      {
+        refreshToken: refreshToken,
+        expires: refresh_token_maxage.toString()
+      }),
+    {
+      expire: config.jwtRefreshExpiration,
+      type: 'json'
+    },
+    function (error, added) {
+      if (added) {
+        console.log('Added to Redis')
+      }
+    });
+
+  // Set browser httpOnly cookies
+  res.cookie("accessToken", accessToken, {
+    // secure: true,
+    // httpOnly: true
+  });
+  res.cookie("refreshToken", refreshToken, {
+    // secure: true,
+    // httpOnly: true
+  });
+
+  return res.status(200).json({
+    // user,
+    user_id,
+    accessToken: accessToken,
+    refreshToken: refreshToken
+  })
 
 }

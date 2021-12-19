@@ -1,4 +1,5 @@
-const {verifyToken} = require('../auth/auth.jwt')
+const { verifyToken } = require('../auth/auth.jwt')
+const cache = require('../cache')
 
 module.exports = app => {
   const provinces = require("../controllers/province.controller.js");
@@ -12,7 +13,10 @@ module.exports = app => {
   router.post("/", provinces.create);
 
   // Retrieve all province
-  router.get("/", provinces.findAll);
+  router.get("/",
+    cache.route(),
+    provinces.findAll
+  );
 
   // Retrieve a province by id
   router.get("/:id", provinces.findOne);

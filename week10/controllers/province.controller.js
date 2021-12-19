@@ -64,7 +64,7 @@ exports.findAll = async (req, res) => {
 
   try {
     const data = await Province.findAll({ where: condition })
-    res.send(data);
+    res.status(200).json(data);
   } catch (err) {
     res.status(400).send({
       message:

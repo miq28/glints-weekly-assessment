@@ -20,8 +20,8 @@
         <a href="/signin">Go back to login selection page</a>
         <br />
 
-        <form action="/api/users/auth/email" method="POST" id="form1">
-
+        <!-- <form action="/api/users/auth/email" method="POST" id="form1"> -->
+        <form action="/api/users/auth/email" id="form1">
             <p>
                 <label>Email</label><br>
                 <input type="text" name="email" value="mod@mod.com">
@@ -33,12 +33,13 @@
                 <input type="password" name="password" value="mod" required="">
             </p>
 
-            <button type="submit" form="form1" value="Submit">Send</button>
+            <!-- <button type="submit" form="form1" value="Submit">Send</button> -->
+            <button type="submit" form="form1" value=" Submit">Send</button>
             <button type="reset">Reset</button>
             <button disabled="disabled">Disabled</button>
         </form>
 
-        <p id="log">Log</p>
+        <b><p id="log">Click send</p></b>
 
     </main>
 
@@ -47,45 +48,73 @@
     </footer>
 </body>
 <script>
-    function logSubmit(event) {
-        log.textContent = `Form Submitted! Time stamp: ${event.timeStamp}`;
-        event.preventDefault();
+    /**
+     * Helper function for POSTing data as JSON with fetch.
+     *
+     * @param {Object} options
+     * @param {string} options.url - URL to POST data to
+     * @param {FormData} options.formData - `FormData` instance
+     * @return {Object} - Response body from URL that was POSTed to
+     */
+    
+    async function postFormDataAsJson({ url, formData }) {
+        const plainFormData = Object.fromEntries(formData.entries());
+        const formDataJsonString = JSON.stringify(plainFormData);
 
-        fetch(event.target.action, {
-            method: 'POST',
-            body: new URLSearchParams(new FormData(event.target)) // event.target is the form
-        }).then((resp) => {
-            // return resp.json(); // or resp.text() or whatever the server sends
-            // window.location.replace("new target URL");
-            window.location.href = myLoginUrl;
-            return false;
-        }).then((body) => {
-            // TODO handle body
-            window.location.replace("new target URL");
-            return false;
-        }).catch((error) => {
-            // TODO handle error
-        });
+        const fetchOptions = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+            body: formDataJsonString,
+        };
+
+        const response = await fetch(url, fetchOptions);
+
+        if (!response.ok) {
+            const errorMessage = await response.text();
+            throw new Error(errorMessage);
+        }
+
+        
+        return response.json();
+
     }
 
-    // const form = document.getElementById('form1');
-    // const log = document.getElementById('log');
-    // form.addEventListener('submit', logSubmit);
+    /**
+     * Event handler for a form submit event.
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/submit_event
+     *
+     * @param {SubmitEvent} event
+     */
+    async function handleFormSubmit(event) {
+        log.textContent = `Waiting response...`;
+        event.preventDefault();
 
-    // document.forms['myFormId'].addEventListener('submit', (event) => {
-    //     event.preventDefault();
-    //     // TODO do something here to show user that form is being submitted
-    //     fetch(event.target.action, {
-    //         method: 'POST',
-    //         body: new URLSearchParams(new FormData(event.target)) // event.target is the form
-    //     }).then((resp) => {
-    //         return resp.json(); // or resp.text() or whatever the server sends
-    //     }).then((body) => {
-    //         // TODO handle body
-    //     }).catch((error) => {
-    //         // TODO handle error
-    //     });
-    // });
+        const form = event.currentTarget;
+        const url = form.action;
+
+        try {
+            const formData = new FormData(form);
+            const responseData = await postFormDataAsJson({ url, formData });
+
+            console.log({ responseData });
+
+            if (responseData.accessToken){
+                log.textContent = 'Access Token received 😂😊👍'
+            }
+        } catch (error) {
+            console.error(error);
+            log.textContent=error.message
+        }
+    }
+
+    const exampleForm = document.getElementById("form1");
+
+    exampleForm.addEventListener("submit", handleFormSubmit);
+
 </script>
 
 </html>

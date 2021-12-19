@@ -1,5 +1,6 @@
 module.exports = app => {
   const office = require("../controllers/office.controller.js");
+  const cache = require('../cache')
 
   var router = require("express").Router();
 
@@ -18,5 +19,5 @@ module.exports = app => {
   // Get an office by district Id
   router.get("/scope/province/reff/district/:id", office.GetOneOfficeByDistrictId);
 
-  app.use('/api/offices', router);
+  app.use('/api/offices', cache.route(), router);
 };

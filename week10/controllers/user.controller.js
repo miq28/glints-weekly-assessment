@@ -1,5 +1,6 @@
 const db = require("../models");
 const User = db.user;
+const RefreshToken = db.refreshToken;
 const Op = db.Sequelize.Op;
 const { isEmptyObject } = require("../utils")
 const bcrypt = require("bcryptjs");
@@ -146,12 +147,21 @@ exports.authEmail = async (req, res) => {
         }
 
         const { accessToken, refreshToken } = GenerateToken(payload)
+        
+        // Create user in our database
+        const storedRefreshToken = await RefreshToken.createToken({
+            token: refreshToken
+        });
+
+        console.log(storedRefreshToken)
 
 
         // res.status(200).send({user, token}).redirect('/protected');
         // res.set('x-token', token);
         // return res.redirect(200, '/protected');
         // res.header('Access-Control-Allow-Origin', req.headers.origin);
+
+
         res.cookie('accessToken', accessToken)
         res.cookie('refreshToken', refreshToken)
         res.cookie('jwt', accessToken)
@@ -160,6 +170,8 @@ exports.authEmail = async (req, res) => {
             accessToken: accessToken,
             refreshToken: refreshToken
         })
+
+        // res.send('OK')
 
     } catch (err) {
         console.log(err);

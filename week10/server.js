@@ -5,8 +5,12 @@ const app = express()
 const NODE_PORT = process.env.PORT || process.env.NODE_PORT || 8000
 const cookieParser = require('cookie-parser')
 
+
+
+
 // const passport = require('./passport');
 const passport = require('passport');
+const { application } = require('express');
 
 app.use(express.static('public'));
 
@@ -26,8 +30,12 @@ app.use(cookieParser())
 
 app.use(passport.initialize());
 
-
 require('./routes')(app)
+const cache = require('./cache')
+// app.use(cache.route())
+
+
+
 
 
 app.listen(NODE_PORT, '0.0.0.0', () => {

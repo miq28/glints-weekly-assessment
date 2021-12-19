@@ -45,7 +45,8 @@ const passportLocalStrategy = new LocalStrategy({
     }
 )
 
-const passportLocalStrategyAll = passport.authenticate(passportLocalStrategy, { failureRedirect: '/logan' })
+// const passportLocalStrategyAll = passport.authenticate(passportLocalStrategy, { failureRedirect: '/logan' })
+const passportLocalStrategyAll = passport.authenticate(passportLocalStrategy)
 
 passport.serializeUser(function (user, cb) {
     console.log('\n---------> Serialize user')

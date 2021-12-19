@@ -7,4 +7,6 @@ module.exports = app => {
     require("./district.routes")(app);
     require("./user.routes")(app);
     require("./office.routes")(app);
+    require("./auth.routes")(app);
+    require("./cache.routes")(app);
 };

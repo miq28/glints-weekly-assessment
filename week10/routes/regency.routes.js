@@ -1,3 +1,5 @@
+const cache = require('../cache')
+
 module.exports = app => {
   const regencies = require("../controllers/regency.controller.js");
 
@@ -15,5 +17,5 @@ module.exports = app => {
   // Retrieve a regency with id
   router.get("/:id", regencies.findOne);
 
-  app.use('/api/regencies', router);
+  app.use('/api/regencies', cache.route(), router);
 };

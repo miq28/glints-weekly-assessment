@@ -1,10 +1,12 @@
 const authJwt = require('../auth/auth.jwt')
 const authLocal = require('../auth/auth.local')
+const cache = require('../cache')
 
 module.exports = app => {
   const user = require("../controllers/user.controller.js");
 
   var router = require("express").Router();
+  const cache = require('../cache')
 
   router.get('/me',
     authJwt.verifyToken,
@@ -32,7 +34,7 @@ module.exports = app => {
   // User sign-in by email
   router.post("/signin", user.signin);
 
-  router.get("/auth/email", user.getAuthEmail);
+  // router.get("/auth/email", user.getAuthEmail);
 
   // User sign-in by email
   router.post("/auth/email",

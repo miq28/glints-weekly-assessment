@@ -12,12 +12,18 @@ module.exports = app => {
     );
 
 
-    router.get('/', (req, res) => {
-        res.sendFile('home.html', { root: process.cwd() + '/public' })
-    })
+    router.get('/',
+        auth.verifyToken,
+        (req, res) => {
+            res.sendFile('home.html', { root: process.cwd() + '/public' })
+        })
 
     router.get('/signin', (req, res) => {
         res.sendFile('signin.html', { root: process.cwd() + '/public' })
+    })
+
+    router.get('/signin/email', (req, res) => {
+        res.sendFile('signin-email-form.html', { root: process.cwd() + '/public' })
     })
 
     router.post('/signout', function (req, res) {
@@ -46,11 +52,11 @@ module.exports = app => {
         }
 
         const payload = user
-    
+
         // FindOrCreate(user)
 
-        const {accessToken, refreshToken} = auth.GenerateToken(payload)
-      
+        const { accessToken, refreshToken } = auth.GenerateToken(payload)
+
         res.cookie('jwt', accessToken)
         res.cookie('accessToken', accessToken)
         res.cookie('refreshToken', refreshToken)

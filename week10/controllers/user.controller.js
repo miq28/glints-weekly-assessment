@@ -121,13 +121,6 @@ exports.signin = async (req, res) => {
 }
 
 // User sign-in
-exports.getAuthEmail = async (req, res) => {
-    // Our login logic starts here
-    res.sendFile('signin-email-form.html', { root: process.cwd() + '/public' })
-
-};
-
-// User sign-in
 exports.authEmail = async (req, res) => {
     // Our login logic starts here
     try {
@@ -167,9 +160,9 @@ exports.authEmail = async (req, res) => {
 
         res.cookie('accessToken', accessToken)
         res.cookie('refreshToken', storedRefreshToken)
-        res.cookie('jwt', accessToken)
+        // res.cookie('jwt', accessToken)
         return res.status(200).json({
-            user,
+            // user,
             accessToken: accessToken,
             refreshToken: storedRefreshToken
         })

@@ -18,7 +18,7 @@ exports.verifyToken = async (req, res, next) => {
       // console.log('header cookie', req.headers['cookie'])
       token = req.headers['cookie']
         .split('; ')
-        .find(row => row.startsWith('jwt='))
+        .find(row => row.startsWith('accessToken='))
       if (token) { token = token.split('=')[1] }
     }
 
@@ -27,7 +27,8 @@ exports.verifyToken = async (req, res, next) => {
     if (!token || token === undefined || token === null) {
       message = "Unauthorized. JWT token is not found"
       console.log({ err: message })
-      return res.status(403).send({ err: message });
+      // return res.status(403).send({ err: message });
+      return res.redirect("/signin");
     }
     // const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_KEY);
 
@@ -40,7 +41,9 @@ exports.verifyToken = async (req, res, next) => {
           }
         */
         console.log({ err: err.message })
-        return res.status(401).send({ err: err.message });
+        // return res.status(401).send({ err: err.message });
+        // return res.redirect("/signin");
+        return res.redirect("/signin");
       }
 
       req.user = decoded;

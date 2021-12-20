@@ -1,3 +1,5 @@
+const cache = require('../cache')
+
 module.exports = app => {
   const districts = require("../controllers/district.controller.js");
 
@@ -15,5 +17,5 @@ module.exports = app => {
   // Retrieve district by id
   router.get("/:id", districts.findOne);
 
-  app.use('/api/districts', router);
+  app.use('/api/districts', cache.route(), router);
 };

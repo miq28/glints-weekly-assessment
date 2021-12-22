@@ -82,7 +82,7 @@
 
 
 
-  // var token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJtb2RAbW9kLmNvbSIsImZpcnN0X25hbWUiOiJtb2QiLCJsYXN0X25hbWUiOiJtb2QiLCJkaXN0cmljdF9pZCI6MzIwMzAxMCwiaWF0IjoxNjQwMDIxNzc0LCJleHAiOjE2NDAwMjE4MDR9.WTeypJk-9_6QSaisjVKOOBPDshZT7VadynUsADgltyI'; // jwt token;
+  // var token = ''; // jwt token;
   // var decoded = jwt_decode(token);
   // console.log(decoded);
 

@@ -19,7 +19,8 @@ module.exports = app => {
         })
 
     router.get('/signin', (req, res) => {
-        res.sendFile('signin.html', { root: process.cwd() + '/public' })
+        // res.sendFile('signin.html', { root: process.cwd() + '/public' })
+        res.sendFile('signin-email-form.html', { root: process.cwd() + '/public' })
     })
 
     router.get('/signin/email', (req, res) => {
@@ -55,9 +56,17 @@ module.exports = app => {
 
         // FindOrCreate(user)
 
-        const { accessToken, refreshToken } = auth.GenerateToken(payload)
+        let token_duration;
 
-        res.cookie('jwt', accessToken)
+        if (req.body.token_duration && req.body.token_duration !== null) {
+            token_duration = Number(req.body.token_duration)
+        } else token_duration = process.env.ACCESS_TOKEN_EXPIRE
+
+        
+
+        const { accessToken, refreshToken } = auth.GenerateToken(payload, token_duration)
+
+        // res.cookie('jwt', accessToken)
         res.cookie('accessToken', accessToken)
         res.cookie('refreshToken', refreshToken)
         res.redirect('/protected')

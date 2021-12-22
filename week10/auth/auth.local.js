@@ -24,6 +24,7 @@ const passportLocalStrategy = new LocalStrategy({
                 message = 'Incorrect username/email or password'
                 console.log({ message: message })
                 return cb(null, false, { message: message });
+                // return res.status(400).send({message: 'Incorrect username/email or password'})
             }
 
             const passwordIsCorrect = await bcrypt.compare(password, user.password)
@@ -31,6 +32,7 @@ const passportLocalStrategy = new LocalStrategy({
                 message = 'Incorrect username/email or password'
                 console.log(message)
                 return cb(null, false, { message: message });
+                // return res.status(400).send({message: 'Incorrect username/email or password'})
             }
 
 
@@ -41,6 +43,7 @@ const passportLocalStrategy = new LocalStrategy({
             // return cb(null, user);
         } catch (err) {
             cb(err)
+            // return res.status(400).send({message: 'Incorrect username/email or password'})
         }
     }
 )

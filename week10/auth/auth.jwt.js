@@ -28,6 +28,8 @@ exports.verifyToken = async (req, res, next) => {
       message = "Unauthorized. JWT token is not found"
       console.log({ err: message })
       // return res.status(403).send({ err: message });
+      res.cookie('error', message);
+      console.log({err: message}) 
       return res.redirect("/signin");
     }
     // const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_KEY);
@@ -40,9 +42,11 @@ exports.verifyToken = async (req, res, next) => {
             message: '_______'
           }
         */
+       console.log('ERRORR BOSSS', token)
         console.log({ err: err.message })
         // return res.status(401).send({ err: err.message });
         // return res.redirect("/signin");
+        res.cookie('error', err.message);
         return res.redirect("/signin");
       }
 
@@ -57,13 +61,19 @@ exports.verifyToken = async (req, res, next) => {
   }
 };
 
-exports.GenerateToken = (payload) => {
+exports.GenerateToken = (payload, token_duration) => {
 
+  if (!token_duration || token_duration === null || token_duration === undefined) {
+    token_duration = process.env.ACCESS_TOKEN_EXPIRE
+  } else {
+    // token_duration = process.env.ACCESS_TOKEN_EXPIRE
+  }
+  
   const accessToken = jwt.sign(
     payload,
     process.env.ACCESS_TOKEN_KEY,
     {
-      expiresIn: "30s",
+      expiresIn: Number(token_duration),
     }
   );
 
@@ -71,7 +81,7 @@ exports.GenerateToken = (payload) => {
     payload,
     process.env.ACCESS_TOKEN_KEY,
     {
-      expiresIn: "24h",
+      expiresIn: process.env.REFRESH_TOKEN_EXPIRE,
     }
   );
 

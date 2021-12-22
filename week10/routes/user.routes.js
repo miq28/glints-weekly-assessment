@@ -8,16 +8,16 @@ module.exports = app => {
   var router = require("express").Router();
   const cache = require('../cache')
 
-  router.get('/me',
-    authJwt.verifyToken,
-    user.welcome
-  );
+  // router.get('/me',
+  //   authJwt.verifyToken,
+  //   user.welcome
+  // );
 
   // Retrieve all Users
   router.get("/", user.findAll);
 
   // render users
-  router.get("/render", user.render);
+  // router.get("/render", user.render);
 
   // User welcome
   router.get("/welcome",
@@ -26,7 +26,7 @@ module.exports = app => {
   );
 
   // Retrieve 1 user
-  router.get("/:id", user.findOne);
+  // router.get("/:id", user.findOne);
 
   // User sign-up
   router.post("/signup", user.signup);

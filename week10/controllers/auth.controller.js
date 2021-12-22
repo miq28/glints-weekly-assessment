@@ -1,4 +1,5 @@
 const db = require("../models");
+const auth = require('../auth/auth.jwt')
 const config = require("../config/auth.config");
 const { user: User, role: Role, refreshToken: RefreshToken } = db;
 
@@ -179,5 +180,59 @@ exports.login = async (req, res) => {
     accessToken: accessToken,
     refreshToken: refreshToken
   })
+
+}
+
+exports.verifyToken = async (req, res) => {
+  try {
+
+    var cookieExtractor = function (req) {
+      var token = null;
+      if (req && req.cookies) {
+        token = req.cookies['accessToken'];
+      }
+      console.log(token)
+      return token;
+    };
+
+    const jwtCookie = cookieExtractor(req)
+
+
+    let token = null;
+    var message;
+    // console.log({req: req.cookies['accessToken']})
+    // if (req.body.accessToken || req.query.token || req.headers["x-access-token"]) {
+    //   // console.log('body query header')
+    //   token = req.body.token || req.query.token || req.headers["x-access-token"]
+    // } else if (req.headers['authorization']) {
+    //   // console.log('header authorization')
+    //   token = req.headers['authorization']
+    //     .split('; ')
+    //     .find(row => row.startsWith('Bearer'))
+    //   if (token) { token = token.split(' ')[1] }
+    // } else if (req.headers['cookie']) {
+    //   // console.log('header cookie', req.headers['cookie'])
+    //   token = req.headers['cookie']
+    //     .split('; ')
+    //     .find(row => row.startsWith('accessToken='))
+    //   if (token) { token = token.split('=')[1] }
+    // }
+
+    if (jwtCookie === null) {return res.send({ message: 'JWT token not found. Please re-login' })} 
+
+    jwt.verify(jwtCookie, process.env.ACCESS_TOKEN_KEY, function (err, decoded) {
+      if (err) {
+        console.log({ message: err.message })
+        return res.json({ message: err.message })
+      }
+
+      return res.json({message: decoded})
+    });
+
+
+  } catch (err) {
+    console.log({ err: err.message })
+    res.status(400).json({err: err.message});
+  }
 
 }

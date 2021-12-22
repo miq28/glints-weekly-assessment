@@ -94,7 +94,13 @@ exports.signup = async (req, res) => {
             district_id
         }
 
-        const { accessToken, refreshToken } = GenerateToken(payload)
+        let token_duration;
+
+        if (req.body.token_duration && req.body.token_duration !== null) {
+            token_duration = Number(req.body.token_duration)
+        } else token_duration = process.env.ACCESS_TOKEN_EXPIRE
+
+        const { accessToken, refreshToken } = GenerateToken(payload, token_duration)
 
         // convert sequelize object to json
         const objUser = createdUser.toJSON()
@@ -139,7 +145,13 @@ exports.authEmail = async (req, res) => {
             district_id: user.district_id
         }
 
-        const { accessToken } = GenerateToken(payload)
+        let token_duration;
+
+        if (req.body.token_duration && req.body.token_duration !== null) {
+            token_duration = Number(req.body.token_duration)
+        } else token_duration = process.env.ACCESS_TOKEN_EXPIRE
+
+        const { accessToken } = GenerateToken(payload, token_duration)
 
         // Create user in our database
         const storedRefreshToken = await RefreshToken.createToken(

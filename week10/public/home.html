@@ -70,6 +70,12 @@
             <div class="field has-addons has-addons-centered">
 
               <div class="control ">
+                <span class="select">
+                  <select id='dropdownSort'>
+                    <option value='id'>Sort by ID</option>
+                    <option value='name'>Sort by Name</option>
+                  </select>
+                </span>
 
                 <div class="select">
                   <select name="country" id='dropdownRoute'>
@@ -83,7 +89,7 @@
                 </div>
               </div>
               <div class="control">
-                <button class="button is-primary" onclick="GetAllProvinces()">Run query</button>
+                <button class="button is-primary" onclick="RunQuery()">Run query</button>
               </div>
 
             </div>
@@ -120,6 +126,8 @@
 
   <script src="js/jwt-decode.js"></script>
   <script>
+
+    window.onLoad = check_token_expire()
     // window.onload = loadDoc;
     // window.onLoad = () => {
     //   const cookies = get_cookies_array()
@@ -139,18 +147,25 @@
     // var decoded = jwt_decode(token);
     // console.log(decoded);
 
-    const jsonPrettify = (json) => {
-      if (typeof json === 'object' && json !== null) {
-        const pretty = JSON.stringify(json, undefined, 2);
+    const jsonPrettify = (data) => {
+      if (typeof data === 'object' && data !== null) {
+        console.log('typeOf', data)
+        const pretty = JSON.stringify(data, undefined, 2);
         return pretty;
+      } else {
+        try {
+          const obj = JSON.parse(data);
+          console.log('jsonprettyfy3')
+          return jsonPrettify(obj);
+        } catch (e) {
+          console.log('jsonprettyfy3')
+          return json;
+        }
       }
 
-      try {
-        const obj = JSON.parse(json);
-        return jsonPrettify(obj);
-      } catch (e) {
-        return json;
-      }
+      console.log('jsonprettyfy')
+
+
     };
 
     function logout() {
@@ -225,8 +240,8 @@
       return cookies;
     }
 
-    async function GetAllProvinces() {
-
+    async function RunQuery() {
+      try {
       const url = dropdownRoute.value
 
       const fetchOptions = {
@@ -236,6 +251,7 @@
           Accept: "application/json",
         },
         // body: formDataJsonString,
+        body: {sort: dropdownSort.value},
       };
 
       myRoute.textContent = url
@@ -243,19 +259,29 @@
 
       const response = await fetch(url, fetchOptions);
 
-      if (!response.ok) {
-        const errorMessage = await response.text();
-        throw new Error(errorMessage);
-      }
+      // if (!response.ok) {
+      //   const errorMessage = await response.text();
+      //   myRes.textContent = errorMessage
+      //   // throw new Error(errorMessage);
+      // }
 
       let data = await response.json()
 
-
-
-
       console.log(data)
-      myRes.textContent = jsonPrettify(data)
-      // myRes.textContent = 'HEHEHEHEEH'
+      // myRes.textContent = jsonPrettify(data)
+      // const pretty = JSON.stringify(JSON.parse(data), undefined, 2);
+      
+      
+        // const pretty = JSON.parse(data);
+        // console.log({ pretty: pretty })
+        // myRes.textContent = JSON.stringify(pretty, undefined, 2)
+        myRes.textContent = jsonPrettify(data)
+      } catch (e) {
+        myRes.textContent = data
+      }
+      
+      // myRes.textContent = jsonPrettify(pretty)
+      
 
       return data;
 
@@ -289,6 +315,7 @@
 
       if (!response.ok) {
         const errorMessage = await response.text();
+        console.log({ errorMessage: errorMessage })
         throw new Error(errorMessage);
       }
 
@@ -352,7 +379,7 @@
     }
 
 
-    check_token_expire()
+
     function check_token_expire() {
       // log.setAttribute('style', 'white-space: pre;');
       // log.textContent = 'Please some times you wait you\'ll be redirected :) :) :) after <span id="countDown">5</span> seconds....';
@@ -363,7 +390,7 @@
       console.log(DECODED)
       const second_expire = Math.round(DECODED.exp - Date.now() / 1000)
       var count = second_expire;
-      progressToken.max = second_expire
+      progressToken.max = DECODED.exp - DECODED.iat
       var minutes, seconds;
       // duration = second_expire
       let myInterval = setInterval(function () {
@@ -385,7 +412,7 @@
           // window.location = '/';
           clearInterval(myInterval)
           progressTokenLabel.textContent = `JWT expired.`
-        } 
+        }
       }, 1000);
     }
 

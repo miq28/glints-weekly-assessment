@@ -43,5 +43,5 @@ module.exports = app => {
   );
 
 
-  app.use('/api/users', router);
+  app.use('/api/users', cache.route(), router);
 };

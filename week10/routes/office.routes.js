@@ -1,3 +1,5 @@
+const authJwt = require('../auth/auth.jwt')
+
 module.exports = app => {
   const office = require("../controllers/office.controller.js");
   const cache = require('../cache')
@@ -19,5 +21,5 @@ module.exports = app => {
   // Get an office by district Id
   router.get("/scope/province/reff/district/:id", office.GetOneOfficeByDistrictId);
 
-  app.use('/api/offices', cache.route(), router);
+  app.use('/api/offices', authJwt.verifyToken, cache.route(), router);
 };

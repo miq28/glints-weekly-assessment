@@ -21,5 +21,5 @@ module.exports = app => {
   // Retrieve a province by id
   router.get("/:id", provinces.findOne);
 
-  app.use('/api/provinces', cache.route(), router);
+  app.use('/api/provinces', verifyToken, cache.route(), router);
 };

@@ -1,4 +1,5 @@
 const cache = require('../cache')
+const {verifyToken} = require('../auth/auth.jwt')
 
 module.exports = app => {
   const districts = require("../controllers/district.controller.js");
@@ -17,5 +18,5 @@ module.exports = app => {
   // Retrieve district by id
   router.get("/:id", districts.findOne);
 
-  app.use('/api/districts', cache.route(), router);
+  app.use('/api/districts', verifyToken, cache.route(), router);
 };

@@ -465,13 +465,13 @@
     function pagedealyredirect() {
         // log.setAttribute('style', 'white-space: pre;');
         // log.textContent = 'Please some times you wait you\'ll be redirected :) :) :) after <span id="countDown">5</span> seconds....';
-        var count = 3;
+        var count = 5;
         setInterval(function () {
             count--;
             if (count <= 0) {
                 window.location = '/';
             } else {
-                authStatus.textContent = "Access Token received 😂😊👍\r\nRedirecting to home page after " + count + ' seconds'
+                authStatus.textContent = "Access Token received 😊\r\nRedirecting to home page after " + count + ' seconds'
             }
         }, 1000);
     }

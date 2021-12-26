@@ -13,7 +13,7 @@ module.exports = app => {
 
 
     router.get('/',
-        auth.verifyToken,
+        // auth.verifyToken,
         (req, res) => {
             res.sendFile('home.html', { root: process.cwd() + '/public' })
         })

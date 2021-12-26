@@ -1,4 +1,5 @@
 const cache = require('../cache')
+const {verifyToken} = require('../auth/auth.jwt')
 
 module.exports = app => {
   const regencies = require("../controllers/regency.controller.js");
@@ -17,5 +18,5 @@ module.exports = app => {
   // Retrieve a regency with id
   router.get("/:id", regencies.findOne);
 
-  app.use('/api/regencies', cache.route(), router);
+  app.use('/api/regencies', verifyToken, cache.route(), router);
 };

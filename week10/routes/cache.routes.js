@@ -1,4 +1,5 @@
 const cache = require('../controllers/cache.controller')
+const authJwt = require('../auth/auth.jwt')
 
 module.exports = app => {
     var router = require("express").Router();
@@ -6,5 +7,5 @@ module.exports = app => {
     // Create a new district
     router.get("/all", cache.all);
   
-    app.use('/api/cache', router);
+    app.use('/api/cache', authJwt.verifyToken, router);
   };

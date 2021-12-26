@@ -197,28 +197,13 @@ exports.verifyToken = async (req, res) => {
 
     const jwtCookie = cookieExtractor(req)
 
+    console.log({jwtCookie: jwtCookie})
 
-    let token = null;
-    var message;
-    // console.log({req: req.cookies['accessToken']})
-    // if (req.body.accessToken || req.query.token || req.headers["x-access-token"]) {
-    //   // console.log('body query header')
-    //   token = req.body.token || req.query.token || req.headers["x-access-token"]
-    // } else if (req.headers['authorization']) {
-    //   // console.log('header authorization')
-    //   token = req.headers['authorization']
-    //     .split('; ')
-    //     .find(row => row.startsWith('Bearer'))
-    //   if (token) { token = token.split(' ')[1] }
-    // } else if (req.headers['cookie']) {
-    //   // console.log('header cookie', req.headers['cookie'])
-    //   token = req.headers['cookie']
-    //     .split('; ')
-    //     .find(row => row.startsWith('accessToken='))
-    //   if (token) { token = token.split('=')[1] }
-    // }
 
-    if (jwtCookie === null) {return res.send({ message: 'JWT token not found. Please re-login' })} 
+    if (!jwtCookie) {
+      console.log({message: 'JWT token not found'})
+      return res.send({ message: 'JWT token not found' })
+    } 
 
     jwt.verify(jwtCookie, process.env.ACCESS_TOKEN_KEY, function (err, decoded) {
       if (err) {

@@ -30,7 +30,8 @@ exports.verifyToken = async (req, res, next) => {
       // return res.status(403).send({ err: message });
       res.cookie('error', message);
       console.log({err: message}) 
-      return res.redirect("/signin");
+      // return res.redirect("/signin");
+      return res.json(message);
     }
     // const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_KEY);
 
@@ -42,12 +43,13 @@ exports.verifyToken = async (req, res, next) => {
             message: '_______'
           }
         */
-       console.log('ERRORR BOSSS', token)
         console.log({ err: err.message })
         // return res.status(401).send({ err: err.message });
         // return res.redirect("/signin");
         res.cookie('error', err.message);
-        return res.redirect("/signin");
+        // return res.redirect("/signin");
+        return res.json(err.message);
+        // return res.sendFile('token-invalid.html', { root: process.cwd() + '/public' })
       }
 
       req.user = decoded;

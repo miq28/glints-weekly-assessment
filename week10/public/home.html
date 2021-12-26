@@ -241,7 +241,7 @@
     }
 
     async function RunQuery() {
-      try {
+
       const url = dropdownRoute.value
 
       const fetchOptions = {
@@ -251,7 +251,7 @@
           Accept: "application/json",
         },
         // body: formDataJsonString,
-        body: {sort: dropdownSort.value},
+        body: { sort: dropdownSort.value },
       };
 
       myRoute.textContent = url
@@ -270,8 +270,8 @@
       console.log(data)
       // myRes.textContent = jsonPrettify(data)
       // const pretty = JSON.stringify(JSON.parse(data), undefined, 2);
-      
-      
+
+      try {
         // const pretty = JSON.parse(data);
         // console.log({ pretty: pretty })
         // myRes.textContent = JSON.stringify(pretty, undefined, 2)
@@ -279,9 +279,9 @@
       } catch (e) {
         myRes.textContent = data
       }
-      
+
       // myRes.textContent = jsonPrettify(pretty)
-      
+
 
       return data;
 

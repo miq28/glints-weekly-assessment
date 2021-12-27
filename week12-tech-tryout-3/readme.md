@@ -1,6 +1,6 @@
 This project is for Week12 / Tech Tryout 3 weekly assesment project at PTB1 Glints Academy.
 
-This project has been temporarily has been deployed in Heroku, please check this link:
+This project temporarily has been deployed in Heroku, please check this link:
 
 [PTB1 Week 12 / TECH TRYOUT 3](https://ptb1prod.herokuapp.com/)
 

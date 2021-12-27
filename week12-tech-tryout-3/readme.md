@@ -59,21 +59,6 @@ REDIS_DEFAULT_EXPIRE=your_redis_default_expire
 
 If everytihing goes well, the app will started on port 8000.
 
-## Front page
-![front-page](img/webpage/front-page.png)
-## Add user
-![add-user-page](img/webpage/add-user-page.png)
-## Protected page - without sign-in
-![protected-page](img/webpage/protected-page.png)
-## Protected page - after sign-in (authenticated)
-![protected-page-authenticated](img/webpage/protected-page-authenticated.png)
-## Sign-in page
-![signin-page](img/webpage/signin-page.png)
-## Sign-in with email
-![signin-with-email-page](img/webpage/signin-with-email-page.png)
-## Sign-in with Google
-![signin-with-google-page](img/webpage/signin-with-google-page.png)
-
 ## DATA BASE
   ![ER_diagram](img/db/ER_diagram.png)
 

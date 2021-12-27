@@ -1,0 +1,197 @@
+\connect indonesia_2 postgres
+
+DROP TABLE IF EXISTS regencies CASCADE;
+DROP TABLE IF EXISTS districts CASCADE;
+DROP TABLE IF EXISTS provinces CASCADE;
+-- DROP TABLE IF EXISTS sub_districts CASCADE;
+
+-- create 'provinces' table
+CREATE TABLE IF NOT EXISTS provinces (
+	id serial PRIMARY KEY, name VARCHAR (255) UNIQUE NOT NULL,
+  created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+  updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
+  deleted_at timestamp
+);
+
+-- create 'regencies' table
+CREATE TABLE IF NOT EXISTS regencies (
+	id serial PRIMARY KEY,
+  province_id integer, name VARCHAR (255) UNIQUE NOT NULL,
+  created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+  updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
+  deleted_at timestamp ,
+  FOREIGN KEY (province_id)
+  REFERENCES provinces(id)
+  ON DELETE CASCADE
+);
+CREATE INDEX regencies_province_id_index
+ON regencies(province_id);
+
+
+-- create 'districts' table
+CREATE TABLE IF NOT EXISTS districts (
+	id serial PRIMARY KEY,
+  regency_id integer,	name VARCHAR (255) UNIQUE NOT NULL,
+  created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+  updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
+  deleted_at timestamp ,
+  FOREIGN KEY (regency_id)
+  REFERENCES regencies(id)
+  ON DELETE CASCADE
+);
+CREATE INDEX districts_id_index
+ON districts(regency_id);
+
+
+BEGIN WORK;
+LOCK TABLE provinces IN ACCESS EXCLUSIVE MODE;
+INSERT INTO provinces VALUES
+  ('11', 'ACEH'),
+  ('12', 'SUMATERA UTARA'),
+  ('32', 'JAWA BARAT'),
+  ('33', 'JAWA TENGAH'),
+  ('34', 'DI YOGYAKARTA'),
+  ('35', 'JAWA TIMUR'),
+  ('73', 'SULAWESI SELATAN');
+COMMIT WORK;
+
+BEGIN WORK;
+LOCK TABLE regencies IN ACCESS EXCLUSIVE MODE;
+INSERT INTO regencies VALUES
+  ('1101', '11', 'KABUPATEN SIMEULUE'),
+  ('1102', '11', 'KABUPATEN ACEH SINGKIL'),
+  ('1103', '11', 'KABUPATEN ACEH SELATAN'),
+
+  ('1273', '12', 'KOTA PEMATANG SIANTAR'),
+  ('1274', '12', 'KOTA TEBING TINGGI'),
+  ('1275', '12', 'KOTA MEDAN'),
+
+  ('3201', '32', 'KABUPATEN BOGOR'),
+  ('3202', '32', 'KABUPATEN SUKABUMI'),
+  ('3203', '32', 'KABUPATEN CIANJUR'),
+
+  ('3301', '33', 'KABUPATEN CILACAP'),
+  ('3302', '33', 'KABUPATEN BANYUMAS'),
+  ('3303', '33', 'KABUPATEN PURBALINGGA'),
+
+  ('3401', '34', 'KABUPATEN KULON PROGO'),
+  ('3402', '34', 'KABUPATEN BANTUL'),
+  ('3403', '34', 'KABUPATEN GUNUNG KIDUL'),
+
+  ('3501', '35', 'KABUPATEN PACITAN'),
+  ('3502', '35', 'KABUPATEN PONOROGO'),
+  ('3503', '35', 'KABUPATEN TRENGGALEK'),
+
+  ('7301', '73', 'KABUPATEN KEPULAUAN SELAYAR'),
+  ('7302', '73', 'KABUPATEN BULUKUMBA'),
+  ('7303', '73', 'KABUPATEN BANTAENG');
+COMMIT WORK;
+
+BEGIN WORK;
+LOCK TABLE districts IN ACCESS EXCLUSIVE MODE;
+INSERT INTO districts VALUES
+  ('1101010', '1101', 'TEUPAH SELATAN'),
+  ('1101020', '1101', 'SIMEULUE TIMUR'),
+  ('1101021', '1101', 'TEUPAH BARAT'),
+  ('1101022', '1101', 'TEUPAH TENGAH'),
+
+  ('1102010', '1102', 'PULAU BANYAK'),
+  ('1102011', '1102', 'PULAU BANYAK BARAT'),
+  ('1102020', '1102', 'SINGKIL'),
+  ('1102021', '1102', 'SINGKIL UTARA'),
+
+  ('1103010', '1103', 'TRUMON'),
+  ('1103011', '1103', 'TRUMON TIMUR'),
+  ('1103012', '1103', 'TRUMON TENGAH'),
+  ('1103020', '1103', 'BAKONGAN'),
+
+  ('1273010', '1273', 'SIANTAR MARIHAT'),
+  ('1273011', '1273', 'SIANTAR MARIMBUN'),
+  ('1273020', '1273', 'SIANTAR SELATAN'),
+  ('1273030', '1273', 'SIANTAR BARAT'),
+
+  ('1274010', '1274', 'PADANG HULU'),
+  ('1274011', '1274', 'TEBING TINGGI KOTA'),
+  ('1274020', '1274', 'RAMBUTAN'),
+  ('1274021', '1274', 'BAJENIS'),
+
+  ('1275010', '1275', 'MEDAN TUNTUNGAN'),
+  ('1275020', '1275', 'MEDAN JOHOR'),
+  ('1275030', '1275', 'MEDAN AMPLAS'),
+  ('1275040', '1275', 'MEDAN DENAI'),
+
+  ('3201010', '3201', 'NANGGUNG'),
+  ('3201020', '3201', 'LEUWILIANG'),
+  ('3201021', '3201', 'LEUWISADENG'),
+  ('3201030', '3201', 'PAMIJAHAN'),
+
+  ('3202010', '3202', 'CIEMAS'),
+  ('3202020', '3202', 'CIRACAP'),
+  ('3202021', '3202', 'WALURAN'),
+  ('3202030', '3202', 'SURADE'),
+
+  ('3203010', '3203', 'AGRABINTA'),
+  ('3203011', '3203', 'LELES'),
+  ('3203020', '3203', 'SINDANGBARANG'),
+  ('3203030', '3203', 'CIDAUN'),
+
+  ('3301010', '3301', 'DAYEUHLUHUR'),
+  ('3301020', '3301', 'WANAREJA'),
+  ('3301030', '3301', 'MAJENANG'),
+  ('3301040', '3301', 'CIMANGGU'),
+
+  ('3302010', '3302', 'LUMBIR'),
+  ('3302020', '3302', 'WANGON'),
+  ('3302030', '3302', 'JATILAWANG'),
+  ('3302040', '3302', 'RAWALO'),
+
+  ('3303010', '3303', 'KEMANGKON'),
+  ('3303020', '3303', 'BUKATEJA'),
+  ('3303030', '3303', 'KEJOBONG'),
+  ('3303040', '3303', 'PENGADEGAN'),
+
+  ('3401010', '3401', 'TEMON'),
+  ('3401020', '3401', 'WATES'),
+  ('3401030', '3401', 'PANJATAN'),
+  ('3401040', '3401', 'GALUR'),
+
+  ('3402010', '3402', 'SRANDAKAN'),
+  ('3402020', '3402', 'SANDEN'),
+  ('3402030', '3402', 'KRETEK'),
+  ('3402040', '3402', 'PUNDONG'),
+
+  ('3403010', '3403', 'PANGGANG'),
+  ('3403011', '3403', 'PURWOSARI'),
+  ('3403020', '3403', 'PALIYAN'),
+  ('3403030', '3403', 'SAPTO SARI'),
+
+  ('3501010', '3501', 'DONOROJO'),
+  ('3501020', '3501', 'PUNUNG'),
+  ('3501030', '3501', 'PRINGKUKU'),
+  ('3501040', '3501', 'PACITAN'),
+
+  ('3502010', '3502', 'NGRAYUN'),
+  ('3502020', '3502', 'SLAHUNG'),
+  ('3502030', '3502', 'BUNGKAL'),
+  ('3502040', '3502', 'SAMBIT'),
+
+  ('3503010', '3503', 'PANGGUL'),
+  ('3503020', '3503', 'MUNJUNGAN'),
+  ('3503030', '3503', 'WATULIMO'),
+  ('3503040', '3503', 'KAMPAK'),
+
+  ('7301010', '7301', 'PASIMARANNU'),
+  ('7301011', '7301', 'PASILAMBENA'),
+  ('7301020', '7301', 'PASIMASSUNGGU'),
+  ('7301021', '7301', 'TAKABONERATE'),
+
+  ('7302010', '7302', 'GANTARANG'),
+  ('7302020', '7302', 'UJUNG BULU'),
+  ('7302021', '7302', 'UJUNG LOE'),
+  ('7302030', '7302', 'BONTO BAHARI'),
+
+  ('7303010', '7303', 'BISSAPPU'),
+  ('7303011', '7303', 'ULUERE'),
+  ('7303012', '7303', 'SINOA'),
+  ('7303020', '7303', 'BANTAENG');
+COMMIT WORK;

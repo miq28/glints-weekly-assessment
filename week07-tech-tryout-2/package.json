@@ -1,0 +1,32 @@
+{
+  "name": "tech-tryout2",
+  "version": "1.0.0",
+  "description": "Assignment checklist - [x] create database with a structure like the one below and its relationships   ![title](img/dbdesign.png)   ![title](img/provinces.png)   ![title](img/regencies.png)   ![title](img/districts.png) - [x] create crud API at least for 1 table. for example API to get, post, patch/put, and delete provinces",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server",
+    "db@drop": "psql postgresql://postgres:postgres@dbtest.cn50fuyfr3aa.ap-southeast-1.rds.amazonaws.com -c 'DROP DATABASE IF EXISTS indonesia_2;'",
+    "db@reset": "psql postgresql://postgres:postgres@dbtest.cn50fuyfr3aa.ap-southeast-1.rds.amazonaws.com -f ./database/reset-db.sql"
+  },
+  "nodemonConfig": {
+    "ignore": ["test/*", "docs/*"],
+    "delay": 2000,
+    "events": {
+      "crash": "kill-port 8000"
+    }
+  },
+  "keywords": ["miq28"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.14",
+    "pg": "^8.7.1"
+  },
+  "devDependencies": {
+    "kill-port": "^1.6.1"
+  }
+}

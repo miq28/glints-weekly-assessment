@@ -1,0 +1,8 @@
+Assessment Week 13 PTB Batch 1 (Choi, nanti di sini isi nama sendiri)
+
+1. Apa itu cookies dan seperti apa rupanya?
+2. Apa saja yang bisa disimpan di cookies?
+3. Apa saja yang tidak boleh disimpan di cookies?
+4. Dalam framework ExpressJS, kapan memakai:
+   a. request.cookies? (atau req.cookies)
+   b. response.cookies? (atau res.cookies)

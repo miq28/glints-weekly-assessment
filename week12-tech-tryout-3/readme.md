@@ -1,21 +1,9 @@
-## DATA BASE
-  ![ER_diagram](img/db/ER_diagram.png)
+This project is for Week12 / Tech Tryout 3 weekly assesment project at PTB1 Glints Academy.
 
-  ![provinces](img/db/provinces.png)
+This project has been temporarily has been deployed in Heroku, please check this link:
 
-  ![title](img/db/regencies.png)
+[PTB1 Week 12 / TECH TRYOUT 3](https://ptb1prod.herokuapp.com/)
 
-  ![title](img/db/districts.png)
-
-## Instructions
-- Run ```npm i``` to install dependecies
-- Run ```npm start``` to start the server.
-- Run ```npm run db@reset``` to restore database to original state if using Linux
-- Run ```npm run db@resetwin``` to restore database to original state if using Windows powershell
-
-Server should be started on port 8000
-
-## Getting started
 There are already 3 built-in users registered in the database.
 
 Simply sign-in using the below credentials:
@@ -25,6 +13,36 @@ Simply sign-in using the below credentials:
 | mod@mod.com      | mod      |
 | user@user.com    | user     |
 
+I used Postgres database hosted in Heroku.
+I also used Redis for caching (powered by Redis Lab).
+
+To run this project locally, please follow below instructions:
+- Clone this project
+- Run ```npm i``` to install dependecies
+- Run ```npm run nodemon``` to start the server.
+- Create ```.env``` file for the environment variables, and put it in the root folder, using keys in the below.
+
+```
+NODE_PORT=8000
+
+DATABASE_URL=your_data_base
+
+ACCESS_TOKEN_KEY=some_key
+ACCESS_TOKEN_EXPIRE=60
+REFRESH_TOKEN_KEY=some_key_again
+REFRESH_TOKEN_EXPIRE=24h
+
+GOOGLE_CLIENT_ID=your_google_clienti_id
+GOOGLE_CLIENT_SECRET=your_google_secret
+GOOGLE_CALLBACK_URL=your_google_cb_url
+
+REDIS_HOST=your_redis_host
+REDIS_PORT=your_redis_port
+REDIS_PASSWORD=your_redis_password
+REDIS_DEFAULT_EXPIRE=your_redis_default_expire
+```
+
+If everytihing goes well, the app will started on port 8000.
 
 ## Front page
 ![front-page](img/webpage/front-page.png)
@@ -40,3 +58,12 @@ Simply sign-in using the below credentials:
 ![signin-with-email-page](img/webpage/signin-with-email-page.png)
 ## Sign-in with Google
 ![signin-with-google-page](img/webpage/signin-with-google-page.png)
+
+## DATA BASE
+  ![ER_diagram](img/db/ER_diagram.png)
+
+  ![provinces](img/db/provinces.png)
+
+  ![title](img/db/regencies.png)
+
+  ![title](img/db/districts.png)

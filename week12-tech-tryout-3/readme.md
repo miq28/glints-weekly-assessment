@@ -1,4 +1,6 @@
 
+![signin-page](img/webpage/signin-page.png)
+
 ### Introduction
 
 This project is for Week12 / Tech Tryout 3 weekly assesment project at PTB1 Glints Academy.

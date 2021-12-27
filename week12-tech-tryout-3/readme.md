@@ -1,3 +1,6 @@
+
+### Introduction
+
 This project is for Week12 / Tech Tryout 3 weekly assesment project at PTB1 Glints Academy.
 
 This project temporarily has been deployed in Heroku, please check this link:
@@ -16,6 +19,16 @@ Simply sign-in using the below credentials:
 I used Postgres database hosted in Heroku.
 I also used Redis for caching (powered by Redis Lab).
 
+### Tasks / Todo List
+
+- [x] API to sign in with jwt
+- [x] API to sign in with passport
+- [ ] Add a feature to sort/order by created_at in API Get All User
+- [x] Implement either Facebook or Google Auth
+- [x] Set expiration time in jwt for 25 minutes
+- [x] Use both .verify and .decode method
+
+### Instructions to run locally
 To run this project locally, please follow below instructions:
 - Clone this project
 - Run ```npm i``` to install dependecies

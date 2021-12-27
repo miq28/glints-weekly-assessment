@@ -5,7 +5,7 @@ This project is for Week12 / Tech Tryout 3 weekly assesment project at PTB1 Glin
 
 This project temporarily has been deployed in Heroku, please check this link:
 
-[PTB1 Week 12 / TECH TRYOUT 3](https://ptb1prod.herokuapp.com/)
+[https://ptb1prod.herokuapp.com](https://ptb1prod.herokuapp.com/)
 
 There are already 3 built-in users registered in the database.
 

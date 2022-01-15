@@ -1,0 +1,2 @@
+npx sequelize-cli model:generate --name User --attributes firstName:string,lastName:string,email:string
+npx sequelize-cli model:generate --name Image --attributes type:string,name:string,data:blob

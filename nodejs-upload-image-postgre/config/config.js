@@ -36,17 +36,26 @@ module.exports = {
     }
   },
   production: {
-    username: process.env.PROD_DB_USERNAME,
-    password: process.env.PROD_DB_PASSWORD,
-    database: process.env.PROD_DB_NAME,
-    host: process.env.PROD_DB_HOSTNAME,
-    port: process.env.PROD_DB_PORT,
-    dialect: 'mysql',
+    username: process.env.DEV_DBUSER,
+    password: process.env.DEV_DBPASS,
+    database: process.env.DEV_DATABASE,
+    host: process.env.DEV_DBHOST,
+    port: process.env.DEV_DBPORT,
+    dialect: process.env.DEV_DBDIALECT,
+    // dialectOptions: {
+    //   bigNumberStrings: true
+    // }
     dialectOptions: {
-      bigNumberStrings: true,
-      //   ssl: {
-      //     ca: fs.readFileSync(__dirname + '/mysql-ca-main.crt')
-      //   }
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    },
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000
     }
   }
 };

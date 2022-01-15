@@ -30,6 +30,7 @@
                 <th>Id</th>
                 <th>Title</th>
                 <th>Photo</th>
+                <th>Type</th>
             </tr>
             <% for(var i=0; i < data.length; i++) { %>
                 <%console.log(data[i])%>
@@ -41,7 +42,15 @@
                             <%= data[i].name %>
                         </td>
                         <td>
-                            <img src="data:image/jpeg;base64, <%= data[i].data %> " alt="Alt Text" />
+                            <% if (data[i].type==='image/jpeg') { %>
+                                <img src="data:image/jpeg;base64, <%= data[i].data %> " alt="Alt Text" />
+                                <%} else if (data[i].type==='image/png') { %>
+                                    <img src="data:image/png;base64, <%= data[i].data %> " alt="Alt Text" />
+                                    <% } %>
+
+                        </td>
+                        <td>
+                            <%= data[i].type %>
                         </td>
                     </tr>
                     <% } %>

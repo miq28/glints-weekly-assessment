@@ -1,5 +1,8 @@
 const dotenv = require('dotenv')
 dotenv.config()
+
+const port = process.env.PORT || process.env.NODE_PORT || 8000
+
 const express = require("express");
 const app = express();
 const db = require("./db/models");
@@ -21,7 +24,6 @@ initRoutes(app);
 //   console.log("Drop and re-sync db.");
 // });
 
-let port = process.env.NODE_PORT; // default: 8000
 app.listen(port, '0.0.0.0', () => {
   console.log(`App started on http://localhost:${port}`);
 });

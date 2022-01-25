@@ -38,7 +38,7 @@ router.post('/add', upload.single('mypdf'), (req, res, next) => {
 Jika menggunakan ```multer```, gunakan option ```fileSize```
 ```javascript
 var limits = {
-    fileSize: 15 * 1024 * 1024, // 15 MB (maksimum ukuran file 15 MB)
+    fileSize: 15 * 1024 * 1024 // 15 MB (maksimum ukuran file 15 MB)
 };
 
 var upload = multer ({
